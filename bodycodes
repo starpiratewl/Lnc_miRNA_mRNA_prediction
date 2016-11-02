@@ -1,0 +1,59 @@
+setwd("D:\\importantbk\\refernce_material\\summary\\important_BK\\My_work\\LncRNA\\Lnc_prediction")
+
+MAPK <- read.csv(file = "MAPK_genes.txt", header = F, stringsAsFactor = F)$V1
+PI3K <- read.csv(file = "PI3K_genes.txt", header = F, stringsAsFactor = F)$V1
+TGFb <- read.csv(file = "TGF_b_genes.txt", header = F, stringsAsFactor = F)$V1
+Wnt <- read.csv(file = "Wnt_genes.txt", header = F, stringsAsFactor = F)$V1
+
+cases <- read.csv(file = "cases.txt", sep = "\t", stringsAsFactor = F, header = F)
+cases <- cases[,-6]
+colnames(cases) <- c("Cancer","Posiont_Annotation","GeneSymbol","Correlation","Pvalue")
+
+cases <- cases$GeneSymbol
+
+intersect(cases,MAPK)
+intersect(cases,PI3K)
+intersect(cases,TGFb)
+intersect(cases,Wnt)
+
+
+
+cellines <- read.csv(file = "celllines.txt", sep = "\t", stringsAsFactor = F, header = F)
+cellines <- cellines[,-6]
+colnames(cellines) <- c("Cancer","Posiont_Annotation","GeneSymbol","Correlation","Pvalue")
+
+cellline <- cellines$GeneSymbol
+
+intersect(cellline,MAPK)
+intersect(cellline,PI3K)
+intersect(cellline,TGFb)
+intersect(cellline,Wnt)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
