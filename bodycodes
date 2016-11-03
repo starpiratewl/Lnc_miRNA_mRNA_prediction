@@ -89,7 +89,7 @@ Wnt <- read.csv(file = "Wnt_genes.txt", header = F, stringsAsFactor = F)$V1
 
 list.files()
 
-mirs <- c("miR-9-3p","miR-9-5p","miR-27-3p","miR-27a-3p","miR-27a-5p","miR-27b-3p","miR-27b-5p","miR-29b-1-5p","miR-29b-2-5p","miR-128-3p","miR-128-5p_1","miR-128-5p_2","miR-133a-3p","miR-133a-5p","miR-137","miR-150-3p","miR-150-5p","miR-153-5p","miR-155-3p","miR-155-5p","miR-203a-3p","miR-203a-5p","miR-203b-3p","miR-203b-5p","miR-204-3p","miR-204-5p","miR-218-1-3p","miR-218-2-3p","miR-218-5p","miR-383-3p","miR-383-5p_1","miR-383-5p_2","miR-383-5p","miR-455-5p","miR-622","miR-629-5p","miR-675-5p_4466","miR-1250-5p","miR-1262_4701-3p_6736-5p","miR-3189-3p","miR-3189-5p","miR-3940-5p_4507","miR-4281","miR-4437","miR-4775","miR-5009-5p_8058","miR-6772-5p","miR-6793-5p","miR-6821-5p","miR-7112-3p")
+mirs <- c("miR-9-3p","miR-9-5p","miR-27-3p","miR-27a-3p","miR-27a-5p","miR-27b-3p","miR-27b-5p","miR-29b-1-5p","miR-29b-2-5p","miR-128-3p","miR-128-5p_1","miR-128-5p_2","miR-133a-3p","miR-133a-5p","miR-137","miR-133b","miR-150-3p","miR-150-5p","miR-153-5p","miR-155-3p","miR-155-5p","miR-203a-3p","miR-203a-5p","miR-203b-3p","miR-203b-5p","miR-204-3p","miR-204-5p","miR-218-1-3p","miR-218-2-3p","miR-218-5p","miR-383-3p","miR-383-5p_1","miR-383-5p_2","miR-383-5p","miR-455-5p","miR-622","miR-629-5p","miR-675-5p_4466","miR-1250-5p","miR-1262_4701-3p_6736-5p","miR-3189-3p","miR-3189-5p","miR-3940-5p_4507","miR-4281","miR-4437","miR-4775","miR-5009-5p_8058","miR-6772-5p","miR-6793-5p","miR-6821-5p","miR-7112-3p")
 
 counttab <- data.frame(miRs = 1, Counts = 1, Percentage = 1)
 
@@ -116,23 +116,32 @@ readfiles <- function(label){
       labelp <- n/length(nonetab$GeneSymbol)
       print(n)
       print(labelp)
-      ## this will not change the global variable
-      ##counttab[counttab$miRs == label,2] <- n
-      ##counttab[counttab$miRs == label,3] <- labelp
-      ##this will change the global variable
       counttab <<- rbind(counttab, c(label, n, labelp))
-
 }
 
 for (i in mirs){
       readfiles(i)
 }
 
+plottab <- counttab[-1,]
+row.names(plottab) <- plottab$miRs
+plottab <- plottab[,-1]
+
+plot(plottab)
+identify(plottab)
+
 
 
 ##############################################
 ##test
 ##############################################
+
+      ## this will not change the global variable
+      ##counttab[counttab$miRs == label,2] <- n
+      ##counttab[counttab$miRs == label,3] <- labelp
+      ##this will change the global variable
+      ##counttab <<- rbind(counttab, c(label, n, labelp))
+
 
 caca <- data.frame(GeneSymbol = NA, Source = NA)
 test <- merge(haha, caca, by = "GeneSymbol",all = T)
