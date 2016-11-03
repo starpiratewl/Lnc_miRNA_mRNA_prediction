@@ -91,7 +91,7 @@ list.files()
 
 mirs <- c("miR-150-3p","miR-150-5p")
 
-counttab <- data.frame()
+counttab <- data.frame(miRs = 1, Counts = 1, Percentage = 1)
 
 readfiles <- function(label){
       if(file.exists(paste(label,"_ts.txt",sep=""))){
@@ -116,9 +116,11 @@ readfiles <- function(label){
       labelp <- n/length(nonetab$GeneSymbol)
       print(n)
       print(labelp)
+      ## this will not change the global variable
       ##counttab[counttab$miRs == label,2] <- n
       ##counttab[counttab$miRs == label,3] <- labelp
-      counttab <- rbind(counttab, c(label, n, labelp))
+      ##this will change the global variable
+      counttab <<- rbind(counttab, c(label, n, labelp))
 
 }
 
