@@ -30,6 +30,9 @@ intersect(cellline,TGFb)
 intersect(cellline,Wnt)
 
 
+## pay attention to this step here, I set up two test files in excel and save as unicode txt files, but there unicode txt files constructed in excel have problem when read into R, when I resave the test files as tab seperated txt files, then it can be read into R via read.csv or read.table.  Don't know why but should notice this.
+testA <- read.csv(file = "testA.txt", sep = "\t", header = F, stringsAsFactor = F)
+testB <- read.csv(file = "testB.txt", sep = "\t", header = F, stringsAsFactor = F)
 
 
 
