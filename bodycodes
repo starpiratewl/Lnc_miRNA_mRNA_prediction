@@ -78,14 +78,40 @@ testB <- read.csv(file = "testB.txt", sep = "\t", header = F, stringsAsFactor = 
 21 OOOOO TargetScan
 
 
+setwd("D:\\importantbk\\refernce_material\\summary\\important_BK\\My_work\\LncRNA\\Lnc_prediction\\mirna_prediction")
+
+list.files()
+
+label <- "miR-150"
+
+if(file.exists(paste(label,"-3p_ts.txt",sep=""))){
+      test1 <- read.csv(file = "miR-150-3p_ts.txt", sep = "\t", stringsAsFactor = F)
+      haha <- data.frame(GeneSymbol = test1[,1], Source = rep("TargetScan", length(test1[,1])))
+} else {
+haha <- data.frame(GeneSymbol = NA, Source = NA)
+}
+
+if(file.exists(paste(label,"-3p_db.txt",sep=""))){
+      test2 <- read.csv(file = "miR-150-3p_db.txt", sep = "\t", stringsAsFactor = F)
+      lala <- data.frame(GeneSymbol = test2$Gene.Symbol, Source = rep("miRDB", length(test2[,1])))
+} else {
+lala <- data.frame(GeneSymbol = NA, Source = NA)
+}
+
+woria <- merge(haha,lala,by = "GeneSymbol",all =T)
+
+caca <- data.frame(GeneSymbol = NA, Source = NA)
+test <- merge(haha, caca, by = "GeneSymbol",all =T )
 
 
+##############################################
+##test
+##############################################
+wogan <- union(test1[,1], test2$Gene.Symbol)
 
+gaosile <- table(wori[,1])
 
-
-
-
-
+gaosile[gaosile == 2]
 
 
 
