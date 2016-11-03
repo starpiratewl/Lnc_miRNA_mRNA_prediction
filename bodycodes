@@ -80,31 +80,51 @@ testB <- read.csv(file = "testB.txt", sep = "\t", header = F, stringsAsFactor = 
 
 setwd("D:\\importantbk\\refernce_material\\summary\\important_BK\\My_work\\LncRNA\\Lnc_prediction\\mirna_prediction")
 
+
+MAPK <- read.csv(file = "MAPK_genes.txt", header = F, stringsAsFactor = F)$V1
+PI3K <- read.csv(file = "PI3K_genes.txt", header = F, stringsAsFactor = F)$V1
+TGFb <- read.csv(file = "TGF_b_genes.txt", header = F, stringsAsFactor = F)$V1
+Wnt <- read.csv(file = "Wnt_genes.txt", header = F, stringsAsFactor = F)$V1
+
+
 list.files()
 
-label <- "miR-150-3p"
+mirs <- c("miR-150-3p","miR-150-5p")
+
+counttab <- data.frame()
 
 readfiles <- function(label){
       if(file.exists(paste(label,"_ts.txt",sep=""))){
-            test1 <- read.csv(file = "miR-150-3p_ts.txt", sep = "\t", stringsAsFactor = F)
-            haha <- data.frame(GeneSymbol = test1[,1], Source = rep("TargetScan", length(test1[,1])))
+            test1 <- read.csv(file = paste(label,"_ts.txt",sep = ""), sep = "\t", stringsAsFactor = F)
+            tab1 <- data.frame(GeneSymbol = test1[,1], Source = rep("TargetScan", length(test1[,1])))
       } else {
-      haha <- data.frame(GeneSymbol = NA, Source = NA)
+      tab1 <- data.frame(GeneSymbol = NA, Source = NA)
       }
 
       if(file.exists(paste(label,"_db.txt",sep=""))){
-            test2 <- read.csv(file = "miR-150-3p_db.txt", sep = "\t", stringsAsFactor = F)
-            lala <- data.frame(GeneSymbol = test2$Gene.Symbol, Source = rep("miRDB", length(test2[,1])))
+            test2 <- read.csv(file = paste(label,"_db.txt",sep = ""), sep = "\t", stringsAsFactor = F)
+            tab2 <- data.frame(GeneSymbol = test2$Gene.Symbol, Source = rep("miRDB", length(test2[,1])))
       } else {
-      lala <- data.frame(GeneSymbol = NA, Source = NA)
+      tab2 <- data.frame(GeneSymbol = NA, Source = NA)
       }
 
-      woria <- merge(haha,lala,by = "GeneSymbol",all =T)
-      tab <- woria[!is.na(woria$GeneSymbol),]
-      write.table(tab, file = paste(label,"_overall.txt",sep = ""),sep = "\t", row.names = F, col.names = T, quote = F)
+      all_tab <- merge(tab1,tab2,by = "GeneSymbol",all =T)
+      nonetab <- all_tab[!is.na(all_tab$GeneSymbol),]
+      write.table(nonetab, file = paste(label,"_overall.txt",sep = ""),sep = "\t", row.names = F, col.names = T, quote = F)
+      
+      n <- length(intersect(nonetab$GeneSymbol, MAPK)) + length(intersect(nonetab$GeneSymbol, PI3K)) + length(intersect(nonetab$GeneSymbol, TGFb)) + length(intersect(nonetab$GeneSymbol, Wnt))
+      labelp <- n/length(nonetab$GeneSymbol)
+      print(n)
+      print(labelp)
+      ##counttab[counttab$miRs == label,2] <- n
+      ##counttab[counttab$miRs == label,3] <- labelp
+      counttab <- rbind(counttab, c(label, n, labelp))
+
 }
 
-
+for (i in mirs){
+      readfiles(i)
+}
 
 
 
