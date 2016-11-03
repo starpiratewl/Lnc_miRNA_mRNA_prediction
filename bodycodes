@@ -89,7 +89,7 @@ Wnt <- read.csv(file = "Wnt_genes.txt", header = F, stringsAsFactor = F)$V1
 
 list.files()
 
-mirs <- c("miR-150-3p","miR-150-5p")
+mirs <- c("miR-9-3p","miR-9-5p","miR-27-3p","miR-27a-3p","miR-27a-5p","miR-27b-3p","miR-27b-5p","miR-29b-1-5p","miR-29b-2-5p","miR-128-3p","miR-128-5p_1","miR-128-5p_2","miR-133a-3p","miR-133a-5p","miR-137","miR-150-3p","miR-150-5p","miR-153-5p","miR-155-3p","miR-155-5p","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-","miR-")
 
 counttab <- data.frame(miRs = 1, Counts = 1, Percentage = 1)
 
@@ -144,14 +144,6 @@ wogan <- union(test1[,1], test2$Gene.Symbol)
 gaosile <- table(wori[,1])
 
 gaosile[gaosile == 2]
-
-
-
-
-
-
-
-
 
 
 
