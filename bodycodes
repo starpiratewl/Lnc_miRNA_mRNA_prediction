@@ -34,6 +34,48 @@ intersect(cellline,Wnt)
 testA <- read.csv(file = "testA.txt", sep = "\t", header = F, stringsAsFactor = F)
 testB <- read.csv(file = "testB.txt", sep = "\t", header = F, stringsAsFactor = F)
 
+## be careful of the different parameters of merge() function
+> merge(testA,testB,by = "V1",all =T)
+      V1  V2.x       V2.y
+1  AAAAA miRDB TargetScan
+2  BBBBB miRDB       <NA>
+3  CCCCC miRDB TargetScan
+4  DDDDD miRDB       <NA>
+5  EEEEE miRDB TargetScan
+6  FFFFF miRDB       <NA>
+7  GGGGG miRDB TargetScan
+8  HHHHH miRDB TargetScan
+9  IIIII miRDB TargetScan
+10 JJJJJ  <NA> TargetScan
+11 KKKKK  <NA> TargetScan
+12 LLLLL  <NA> TargetScan
+13 MMMMM  <NA> TargetScan
+14 NNNNN  <NA> TargetScan
+15 OOOOO  <NA> TargetScan
+
+> merge(testA,testB,all =T)
+      V1         V2
+1  AAAAA      miRDB
+2  AAAAA TargetScan
+3  BBBBB      miRDB
+4  CCCCC      miRDB
+5  CCCCC TargetScan
+6  DDDDD      miRDB
+7  EEEEE      miRDB
+8  EEEEE TargetScan
+9  FFFFF      miRDB
+10 GGGGG      miRDB
+11 GGGGG TargetScan
+12 HHHHH      miRDB
+13 HHHHH TargetScan
+14 IIIII      miRDB
+15 IIIII TargetScan
+16 JJJJJ TargetScan
+17 KKKKK TargetScan
+18 LLLLL TargetScan
+19 MMMMM TargetScan
+20 NNNNN TargetScan
+21 OOOOO TargetScan
 
 
 
