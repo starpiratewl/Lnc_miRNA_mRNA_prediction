@@ -131,6 +131,39 @@ plot(plottab)
 identify(plottab)
 
 
+miR_128_3p <- read.csv(file = "miR-128-3p_overall.txt", sep = "\t", header = T, stringsAsFactor = F)$GeneSymbol
+miR_128_3p_MAPK <- intersect(miR_128_3p,MAPK)
+miR_128_3p_Wnt <- intersect(miR_128_3p,Wnt)
+miR_128_3p_PI3K <- intersect(miR_128_3p,PI3K)
+miR_128_3p_TGFb <- intersect(miR_128_3p,TGFb)
+write.table(miR_128_3p_MAPK, file = "miR_128_3p_MAPK.txt", sep = "\t", row.names = F, col.names = F, quote = F)
+write.table(miR_128_3p_Wnt, file = "miR_128_3p_Wnt.txt", sep = "\t", row.names = F, col.names = F, quote = F)
+write.table(miR_128_3p_PI3K, file = "miR_128_3p_PI3K.txt", sep = "\t", row.names = F, col.names = F, quote = F)
+write.table(miR_128_3p_TGFb, file = "miR_128_3p_TGFb.txt", sep = "\t", row.names = F, col.names = F, quote = F)
+
+
+miR_128_5p_1 <- read.csv(file = "miR-128-5p_1_overall.txt", sep = "\t", header = T, stringsAsFactor = F)$GeneSymbol
+miR_128_5p_1_MAPK <- intersect(miR_128_5p_1,MAPK)
+miR_128_5p_1_Wnt <- intersect(miR_128_5p_1,Wnt)
+miR_128_5p_1_PI3K <- intersect(miR_128_5p_1,PI3K)
+miR_128_5p_1_TGFb <- intersect(miR_128_5p_1,TGFb)
+write.table(miR_128_5p_1_MAPK, file = "miR_128_5p_1_MAPK.txt", sep = "\t", row.names = F, col.names = F, quote = F)
+write.table(miR_128_5p_1_Wnt, file = "miR_128_5p_1_Wnt.txt", sep = "\t", row.names = F, col.names = F, quote = F)
+write.table(miR_128_5p_1_PI3K, file = "miR_128_5p_1_PI3K.txt", sep = "\t", row.names = F, col.names = F, quote = F)
+write.table(miR_128_5p_1_TGFb, file = "miR_128_5p_1_TGFb.txt", sep = "\t", row.names = F, col.names = F, quote = F)
+
+
+miR_128_5p_2 <- read.csv(file = "miR-128-5p_2_overall.txt", sep = "\t", header = T, stringsAsFactor = F)$GeneSymbol
+miR_128_5p_2_MAPK <- intersect(miR_128_5p_2,MAPK)
+miR_128_5p_2_Wnt <- intersect(miR_128_5p_2,Wnt)
+miR_128_5p_2_PI3K <- intersect(miR_128_5p_2,PI3K)
+miR_128_5p_2_TGFb <- intersect(miR_128_5p_2,TGFb)
+write.table(miR_128_5p_2_MAPK, file = "miR_128_5p_2_MAPK.txt", sep = "\t", row.names = F, col.names = F, quote = F)
+write.table(miR_128_5p_2_Wnt, file = "miR_128_5p_2_Wnt.txt", sep = "\t", row.names = F, col.names = F, quote = F)
+write.table(miR_128_5p_2_PI3K, file = "miR_128_5p_2_PI3K.txt", sep = "\t", row.names = F, col.names = F, quote = F)
+write.table(miR_128_5p_2_TGFb, file = "miR_128_5p_2_TGFb.txt", sep = "\t", row.names = F, col.names = F, quote = F)
+
+
 
 
 
