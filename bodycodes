@@ -132,6 +132,57 @@ identify(plottab)
 
 
 
+
+
+###########
+## KEGG
+###########
+##PI3K——TNR，TCL1B
+##TGF-b——LEFTY1，LEFTY2
+##Wnt —— TBL1X
+
+gene_data <- c(1,1,1,1,1)
+names(gene_data) <- c("TNR","TCL1B","LEFTY1","LEFTY2","TBL1X")
+
+library(pathview)
+
+pv.out <- pathview(gene.data=gene_data, gene.idtype="SYMBOL",pathway.id="04151", species="hsa", kegg.native=TRUE)
+
+
+pv.out <- pathview(gene.data=gene_data, gene.idtype="SYMBOL",pathway.id="04350", species="hsa", kegg.native=TRUE)
+
+
+pv.out <- pathview(gene.data=gene_data, gene.idtype="SYMBOL",pathway.id="04310", species="hsa", kegg.native=TRUE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ##############################################
 ##test
 ##############################################
