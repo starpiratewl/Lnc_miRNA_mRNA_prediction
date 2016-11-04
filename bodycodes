@@ -148,19 +148,96 @@ library(pathview)
 
 pv.out <- pathview(gene.data=gene_data, gene.idtype="SYMBOL",pathway.id="04151", species="hsa", kegg.native=TRUE)
 
-
 pv.out <- pathview(gene.data=gene_data, gene.idtype="SYMBOL",pathway.id="04350", species="hsa", kegg.native=TRUE)
-
 
 pv.out <- pathview(gene.data=gene_data, gene.idtype="SYMBOL",pathway.id="04310", species="hsa", kegg.native=TRUE)
 
 
 
 
+setwd("D:\\importantbk\\refernce_material\\summary\\important_BK\\My_work\\LncRNA\\Lnc_prediction\\TCGA_prediction")
+
+library("org.Hs.eg.db")
+library("GSEABase")
+library("GOstats")
+library("pathview")
+
+
+tab1 <- read.csv(file = "cases.txt", sep = "\t", header = F, stringsAsFactor = F)
+
+genes <- tab1$V3
+
+entrezIDs <- mget(genes, org.Hs.egSYMBOL2EG, ifnotfound=NA)
+
+entrezIDs <- as.character(entrezIDs)
+
+
+keggAnn <- get("org.Hs.egPATH")
+universe <- Lkeys(keggAnn)
+params <- new("KEGGHyperGParams", 
+geneIds=entrezIDs, 
+universeGeneIds=universe, 
+annotation="org.Hs.eg.db", 
+categoryName="KEGG", 
+pvalueCutoff=0.05,
+testDirection="over")
+
+over <- hyperGTest(params)
+kegg <- summary(over)
+library(Category)
+glist <- geneIdsByCategory(over)
+glist <- sapply(glist, function(.ids) {
+.sym <- mget(.ids, envir=org.Hs.egSYMBOL, ifnotfound=NA)
+.sym[is.na(.sym)] <- .ids[is.na(.sym)]
+paste(.sym, collapse=";")
+})
+
+
+kegg$Symbols <- glist[as.character(kegg$KEGGID)]
+
+
+write.table(kegg, file = "cases_kegg.txt", row.names = F, quote = F, sep = "\t")
 
 
 
 
+
+
+
+tab2 <- read.csv(file = "celllines.txt", sep = "\t", header = F, stringsAsFactor = F)
+
+genes <- tab2$V3
+
+entrezIDs <- mget(genes, org.Hs.egSYMBOL2EG, ifnotfound=NA)
+
+entrezIDs <- as.character(entrezIDs)
+
+
+keggAnn <- get("org.Hs.egPATH")
+universe <- Lkeys(keggAnn)
+params <- new("KEGGHyperGParams", 
+geneIds=entrezIDs, 
+universeGeneIds=universe, 
+annotation="org.Hs.eg.db", 
+categoryName="KEGG", 
+pvalueCutoff=0.05,
+testDirection="over")
+
+over <- hyperGTest(params)
+kegg <- summary(over)
+library(Category)
+glist <- geneIdsByCategory(over)
+glist <- sapply(glist, function(.ids) {
+.sym <- mget(.ids, envir=org.Hs.egSYMBOL, ifnotfound=NA)
+.sym[is.na(.sym)] <- .ids[is.na(.sym)]
+paste(.sym, collapse=";")
+})
+
+
+kegg$Symbols <- glist[as.character(kegg$KEGGID)]
+
+
+write.table(kegg, file = "celllines_kegg.txt", row.names = F, quote = F, sep = "\t")
 
 
 
