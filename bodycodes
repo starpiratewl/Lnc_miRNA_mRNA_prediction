@@ -130,6 +130,12 @@ plottab <- plottab[,-1]
 plot(plottab)
 identify(plottab)
 
+wirte.table(counttab, file = "count_tab.txt", sep = "\t", col.names = T, row.names = F, quote = F)
+
+boxplot(as.numeric(counttab$Percentage), ylab = "Percentage of Interesting genes")
+rug(jitter(as.numeric(counttab$Percentage)), side= 2)
+abline(h = mean(as.numeric(counttab$Percentage)), lty = 2)
+
 
 miR_128_3p <- read.csv(file = "miR-128-3p_overall.txt", sep = "\t", header = T, stringsAsFactor = F)$GeneSymbol
 miR_128_3p_MAPK <- intersect(miR_128_3p,MAPK)
