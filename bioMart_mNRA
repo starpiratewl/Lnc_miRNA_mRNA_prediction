@@ -137,3 +137,58 @@ head(my_refseq_tss)
 #4    NM_022840           chr18          2571483        2571487      -
 #5    NM_033453           chr20          3190004        3190008      +
 #6 NM_001267623           chr20          3190169        3190173      +
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+########################################################################################################
+## following are the experiments by myself
+########################################################################################################
+
+
+library("biomaRt")
+mart <- useMart("ENSEMBL_MART_ENSEMBL", dataset = "mmusculus_gene_ensembl", host="www.ensembl.org")
+
+
+results_genelist <- getBM(attributes = c("ensembl_gene_id", "ensembl_transcript_id", "ensembl_peptide_id","external_gene_name"),filters = "external_gene_name", genelist, mart = mart)
+
+entrez <- c("673", "7157", "837")
+getSequence(id = entrez, type = "entrezgene", seqType = "coding_gene_flank", upstream = 100, mart = mart)
+
+
+test <- getSequence(id = "SALL4", type = "hgnc_symbol", seqType = "cdna", mart = mart)
+
+write.table(test, file = "test.txt", sep = "\t", col.names = T, row.names = F, quote = F)
+
+
+
+
+
+
+my_refseq <- getBM(attributes='refseq_mrna', filters = 'hgnc_symbol', values = "Sall4", mart = mart)
+
+my_refseq <- getBM(attributes='refseq_mrna', filters = 'hgnc_id', values = "99377", mart = mart)
+
+my_refseq <- getBM(attributes='cdna', filters = 'hgnc_id', values = "99377", mart = mart)
+
+
+getSequence(id="Sall4", type="hgnc_symbol", seqType="peptide", mart = mart)
+
+
+getSequence(id="99377", type="hgnc_id", seqType="peptide", mart = mart)
+
+
+
+
+
+results_genelist <- getBM(attributes = c("ensembl_gene_id", "ensembl_transcript_id", "ensembl_peptide_id","external_gene_name"),filters = "external_gene_name", "SALL4", mart = mart)
