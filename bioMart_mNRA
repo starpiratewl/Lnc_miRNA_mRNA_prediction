@@ -12,6 +12,10 @@ library("biomaRt")
 
 #use ensembl mart
 ensembl <- useMart("ensembl",dataset="hsapiens_gene_ensembl")
+## due to some unknown reason, we use following code to create mart
+mart <- useMart("ENSEMBL_MART_ENSEMBL", dataset = "hsapiens_gene_ensembl", host="www.ensembl.org")
+
+
 
 #store the filters
 filters <- listFilters(ensembl)
@@ -47,7 +51,7 @@ my_chr <- c(1:22,'X','Y')
 my_refseq <- getBM(attributes='refseq_mrna',
                    filters = 'chromosome_name',
                    values = my_chr,
-                   mart = ensembl)
+                   mart = mart)
 
 #how many entries 2013 November 28th
 length(my_refseq)
