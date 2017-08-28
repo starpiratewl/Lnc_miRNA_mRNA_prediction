@@ -60,6 +60,27 @@ test <- scan(file = "mature.fa", what = "", sep = ">")
 
 
 
+#############################################################################################
+## test
+#############################################################################################
+myData <- readChar(con = "t_SNP.txt", nchars = file.info("t_SNP.txt")$size, useByte=F)
+
+
+# 读取整个文件，用strsplit 分隔每一行
+
+Sp_Data <- strsplit(myData,'\n')
+
+for (i in Sp_Data[[1]]){
+
+    j <- strsplit(i, '\t')
+
+    if (as.numeric(j[[1]][3]) > 160000 ){
+
+        print(i)
+
+    }
+
+}
 
 
 
