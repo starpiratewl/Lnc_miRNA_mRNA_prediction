@@ -19,7 +19,10 @@ head_names[1] <- "miRNA_ID"
 colnames(keep_mir_tab) <- head_names
 
 ## this the clean mir expression table I want
+
 keep_mir_tab <- keep_mir_tab[-1,]
+
+
 
 ## read the predicted mir list
 pre_mir_tab <- read.csv(file = "output_0.05.txt", header = F, sep = "\t", stringsAsFactor = F)
@@ -35,26 +38,36 @@ pre_mir_tab <- read.csv(file = "pre_mir_list.txt", header = F, sep = "\t", strin
 ## this is the mir list I want
 pre_mir_list <- unique(pre_mir_tab$V1)
 
-clean_mir_tab <- keep_mir_tab[keep_mir_tab$miRNA_ID %in% pre_mir_list, ]
+
+## get the target predicted by target scan, the result are divided into conserved and poor conserved parts
+pre_target_con <- read.csv(file = "conserved.txt", sep = "\t", stringsAsFactor = F,header = F)
+pre_target_con_list <- unique(pre_target_con$V1)
+
+
+pre_target_pcon <- read.csv(file = "poor_conserved.txt", sep = "\t", stringsAsFactor = F,header = F)
+pre_target_pcon_list <- unique(pre_target_pcon$V1)
+
+con_list <- intersect(pre_mir_list, pre_target_con_list)
+
+pcon_list <- intersect(pre_mir_list, pre_target_pcon_list)
+
+
+
+
+##get the overlap expression table
+clean_mir_tab <- keep_mir_tab[keep_mir_tab$miRNA_ID %in% con_list, ]
 
 rownames(clean_mir_tab) <- clean_mir_tab$miRNA_ID
 clean_mir_tab <- clean_mir_tab[,-1]
 
-meanlist <- rep(NA, length(clean_mir_tab[,1]))
 
-for (i in 1:length(clean_mir_tab[,1])){
-  meanlist[i] <- mean(as.numeric(clean_mir_tab[i,]))
-}
+##meanlist <- rep(NA, length(clean_mir_tab[,1]))
 
-clean_mir_tab_filter <- clean_mir_tab[meanlist <= 100,]
+##for (i in 1:length(clean_mir_tab[,1])){
+##  meanlist[i] <- mean(as.numeric(clean_mir_tab[i,]))
+##}
 
-
-dim(clean_mir_tab)
-##[1] 197 297
-
-
-
-
+##clean_mir_tab_filter <- clean_mir_tab[meanlist <= 100,]
 
 
 
@@ -62,16 +75,40 @@ library(gplots)
 library(RColorBrewer)
 library(pheatmap)
 
-miMatrix <- data.matrix(clean_mir_tab_filter)
+## plot the heatmap of interaction prediction
+miMatrix <- data.matrix(clean_mir_tab)
 
-for (i in 1:length(clean_mir_tab_filter[,1])){
-  print(range(as.numeric(clean_mir_tab_filter[i,])))
+for (i in 1:length(clean_mir_tab[,1])){
+  print(range(as.numeric(clean_mir_tab[i,])))
 }
 
 
 my_palette <- colorRampPalette(c( "blue", "floralwhite","red3"))(n = 299)
-col_breaks <- c(seq(0,20,length=100),seq(21,200,length=100),seq(201,20000,length=100))
-png("mir_expression.png")
+col_breaks <- c(seq(0,300,length=100),seq(301,999,length=100),seq(1000,60000,length=100))
+pdf("mir_expression.pdf")
 heatmap.2(miMatrix, cexRow = 0.8, cexCol = 0.8, col=my_palette, breaks = col_breaks,density.info="none",trace="none",margins =c(5,9))
 dev.off()
+
+
+
+## plot the heatmap of prediction from targetscan
+clean_mir_tab_ts <- keep_mir_tab[keep_mir_tab$miRNA_ID %in% pre_target_con_list, ]
+rownames(clean_mir_tab_ts) <- clean_mir_tab_ts$miRNA_ID
+clean_mir_tab_ts <- clean_mir_tab_ts[,-1]
+
+miMatrix <- data.matrix(clean_mir_tab_ts)
+
+for (i in 1:length(clean_mir_tab_ts[,1])){
+  print(range(as.numeric(clean_mir_tab_ts[i,])))
+}
+
+
+my_palette <- colorRampPalette(c( "blue", "floralwhite","red3"))(n = 299)
+col_breaks <- c(seq(0,300,length=100),seq(301,999,length=100),seq(1000,60000,length=100))
+pdf("mir_expression.pdf")
+heatmap.2(miMatrix, cexRow = 0.8, cexCol = 0.8, col=my_palette, breaks = col_breaks,density.info="none",trace="none",margins =c(5,9))
+dev.off()
+
+
+
 
