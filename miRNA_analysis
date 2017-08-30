@@ -36,8 +36,42 @@ pre_mir_tab <- read.csv(file = "pre_mir_list.txt", header = F, sep = "\t", strin
 pre_mir_list <- unique(pre_mir_tab$V1)
 
 clean_mir_tab <- keep_mir_tab[keep_mir_tab$miRNA_ID %in% pre_mir_list, ]
+
+rownames(clean_mir_tab) <- clean_mir_tab$miRNA_ID
+clean_mir_tab <- clean_mir_tab[,-1]
+
+meanlist <- rep(NA, length(clean_mir_tab[,1]))
+
+for (i in 1:length(clean_mir_tab[,1])){
+  meanlist[i] <- mean(as.numeric(clean_mir_tab[i,]))
+}
+
+clean_mir_tab_filter <- clean_mir_tab[meanlist <= 100,]
+
+
 dim(clean_mir_tab)
-##[1] 197 298
+##[1] 197 297
 
 
+
+
+
+
+
+library(gplots)
+library(RColorBrewer)
+library(pheatmap)
+
+miMatrix <- data.matrix(clean_mir_tab_filter)
+
+for (i in 1:length(clean_mir_tab_filter[,1])){
+  print(range(as.numeric(clean_mir_tab_filter[i,])))
+}
+
+
+my_palette <- colorRampPalette(c( "blue", "floralwhite","red3"))(n = 299)
+col_breaks <- c(seq(0,20,length=100),seq(21,200,length=100),seq(201,20000,length=100))
+pdf("mir_expression.pdf")
+heatmap.2(miMatrix, cexRow = 0.8, cexCol = 0.8, col=my_palette, breaks = col_breaks,density.info="none",trace="none",margins =c(5,9))
+dev.off()
 
