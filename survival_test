@@ -16,7 +16,8 @@ my.surv <- Surv( os_years,os_status=='DECEASED')
 fit.KM=survfit(my.surv~1)
 fit.KM
 plot(fit.KM)
- 
+
+
 log_rank_p <- apply(dat, 1, function(values1){
   group=ifelse(values1>median(values1),'high','low')
   kmfit2 <- survfit(my.surv~group)
