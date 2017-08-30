@@ -1,28 +1,43 @@
 setwd("C:\\Users\\WL\\Desktop\\binglike\\zhangmin")
 
 
+#################################################################
+## heatmap of mirna
+#################################################################
 
+mir_tab <- read.csv(file = "COADREAD.mirnaseq__illuminahiseq_mirnaseq__bcgsc_ca__Level_3__miR_gene_expression__data.data.txt", sep = "\t", stringsAsFactor = F)
 
+grep("per_million", mir_tab[1,])
 
+kepp_id <- c(1,grep("per_million", mir_tab[1,]))
 
+keep_mir_tab <- mir_tab[,kepp_id]
 
+head_names <- colnames(keep_mir_tab)
+head_names[1] <- "miRNA_ID"
 
+colnames(keep_mir_tab) <- head_names
 
+## this the clean mir expression table I want
+keep_mir_tab <- keep_mir_tab[-1,]
 
+## read the predicted mir list
+pre_mir_tab <- read.csv(file = "output_0.05.txt", header = F, sep = "\t", stringsAsFactor = F)
+pre_mir_list <- unique(pre_mir_tab[,1])
 
+write.table(pre_mir_list, file = "pre_mir_list.txt", sep = "\t", col.names = F, row.names = F, quote = F)
 
+## subsitute the "-3p" and "-5p" in ultroedit
+## subsitute the "hsa-miR-XXX" to "hsa-mir-XXX" beacause in the following step we need to do some mapping , the "R" will influence our perform
 
+pre_mir_tab <- read.csv(file = "pre_mir_list.txt", header = F, sep = "\t", stringsAsFactor = F)
 
+## this is the mir list I want
+pre_mir_list <- unique(pre_mir_tab$V1)
 
-
-
-
-
-
-
-
-
-
+clean_mir_tab <- keep_mir_tab[keep_mir_tab$miRNA_ID %in% pre_mir_list, ]
+dim(clean_mir_tab)
+##[1] 197 298
 
 
 
