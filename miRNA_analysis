@@ -71,7 +71,7 @@ for (i in 1:length(clean_mir_tab_filter[,1])){
 
 my_palette <- colorRampPalette(c( "blue", "floralwhite","red3"))(n = 299)
 col_breaks <- c(seq(0,20,length=100),seq(21,200,length=100),seq(201,20000,length=100))
-pdf("mir_expression.pdf")
+png("mir_expression.png")
 heatmap.2(miMatrix, cexRow = 0.8, cexCol = 0.8, col=my_palette, breaks = col_breaks,density.info="none",trace="none",margins =c(5,9))
 dev.off()
 
