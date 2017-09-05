@@ -1,0 +1,39 @@
+setwd("C:\\Users\\WL\\Desktop\\binglike\\zhangmin")
+
+all_tab <- read.csv(file = "COADREAD.clin.merged.txt", sep = "\t", stringsAsFactors = F, header = F)
+
+filter_tab <- all_tab[c(17,39,41,658,678,679,703,795),]
+
+clinic_tab <- t(filter_tab)
+
+row.names(clinic_tab) <- c()
+colnames(clinic_tab) <- clinic_tab[1,]
+clinic_tab <- clinic_tab[-1,]
+clinic_tab <- as.data.frame(clinic_tab)
+
+clinic_tab_no <- clinic_tab[!is.na(clinic_tab$patient.follow_ups.follow_up.vital_status),]
+clinic_tab_no <- clinic_tab_no[!is.na(clinic_tab_no$patient.stage_event.pathologic_stage),]
+
+clinic_tab_no$stage_status <- rep(NA, length(clinic_tab_no[,1]))
+
+for (i in 1:length(clinic_tab_no[,1])){
+  if(sum(unlist(strsplit(as.character(clinic_tab_no[i,8]), "")) == "i") == 1 && sum(unlist(strsplit(as.character(clinic_tab_no[i,8]), "")) == "v") == 0
+){
+    clinic_tab_no[i,9] <- "I"
+  }else if(sum(unlist(strsplit(as.character(clinic_tab_no[i,8]), "")) == "i") == 2){
+    clinic_tab_no[i,9] <- "II"
+  }else if(sum(unlist(strsplit(as.character(clinic_tab_no[i,8]), "")) == "i") == 3){
+    clinic_tab_no[i,9] <- "III"
+  }else{clinic_tab_no[i,9] <- "IIII"}
+}
+
+## pitfalls in this practice
+## 1, we have to use "else if" command if we have multiple options
+## 2, be aware of the format of "else if", it should go after the "}" symbol belonging to last sector and should has a "{" belonging to this sector as the last symbol in the line
+
+
+
+
+
+
+
