@@ -53,16 +53,30 @@ final_tab_clean <- final_tab[!is.na(final_tab$OSBPL3),]
 ulti_tab <- final_tab_clean[!is.na(final_tab_clean$stage_status),]
 ##ulti_tab$OSBPL3 <- as.numeric(ulti_tab$OSBPL3)
 ## here the as.numerci() function can not convert the factor into numeric correctly
+## or use "as.numeric(levels(x)[x])"
 ## so we choose another function, use as.character() function to convert the factor first into character, then into the numeric
 ulti_tab$OSBPL3 <- as.numeric(as.character(ulti_tab$OSBPL3))
 
 
 
-
+pdf("OSBPL3_expression.pdf")
 boxplot(OSBPL3 ~ stage_status, data=ulti_tab,
 main="OSBPL3 expression",
 xlab="stage_status",
 ylab="OSBPL3 RPKM")
+dev.off()
+
 
 
 t.test(ulti_tab$OSBPL3[ulti_tab$stage_status == "III"], ulti_tab$OSBPL3[ulti_tab$stage_status == "II"])
+
+
+
+
+
+
+
+
+
+
+
