@@ -32,8 +32,37 @@ for (i in 1:length(clinic_tab_no[,1])){
 ## 2, be aware of the format of "else if", it should go after the "}" symbol belonging to last sector and should has a "{" belonging to this sector as the last symbol in the line
 
 
+## get mRNA seq data
+
+rnaseq <-  read.csv(file = "COADREAD.mRNAseq_RPKM.txt", sep = "\t", stringsAsFactors = F, header = F)
+
+rnaseq_tab <- rnaseq[c(1,12758,7184,102,14422,18710),]
+rnaseq_tab[1,] <- substr(rnaseq_tab[1,], 1,12)
+rnaseq_tab[1,] <- tolower(rnaseq_tab[1,])
+rnaseq_tab <- t(rnaseq_tab)
+rnaseq_tab <- as.data.frame(rnaseq_tab)
+row.names(rnaseq_tab) <- c()
+tag_names <- c("TCGAIDs", "OSBPL3", "GNPNAT1", "ABCE1", "PUS7", "TRIP13")
+colnames(rnaseq_tab) <- tag_names
+rnaseq_tab <- rnaseq_tab[-1,]
+
+
+## emerge the tow tables
+final_tab <- merge(clinic_tab_no, rnaseq_tab, by.x = "patient.bcr_patient_barcode", by.y = "TCGAIDs", all = T)
+final_tab_clean <- final_tab[!is.na(final_tab$OSBPL3),]
+ulti_tab <- final_tab_clean[!is.na(final_tab_clean$stage_status),]
+##ulti_tab$OSBPL3 <- as.numeric(ulti_tab$OSBPL3)
+## here the as.numerci() function can not convert the factor into numeric correctly
+## so we choose another function, use as.character() function to convert the factor first into character, then into the numeric
+ulti_tab$OSBPL3 <- as.numeric(as.character(ulti_tab$OSBPL3))
 
 
 
 
+boxplot(OSBPL3 ~ stage_status, data=ulti_tab,
+main="OSBPL3 expression",
+xlab="stage_status",
+ylab="OSBPL3 RPKM")
 
+
+t.test(ulti_tab$OSBPL3[ulti_tab$stage_status == "III"], ulti_tab$OSBPL3[ulti_tab$stage_status == "II"])
