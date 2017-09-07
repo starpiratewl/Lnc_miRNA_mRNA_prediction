@@ -56,7 +56,10 @@ ulti_tab <- final_tab_clean[!is.na(final_tab_clean$stage_status),]
 ## or use "as.numeric(levels(x)[x])"
 ## so we choose another function, use as.character() function to convert the factor first into character, then into the numeric
 ulti_tab$OSBPL3 <- as.numeric(as.character(ulti_tab$OSBPL3))
-
+ulti_tab$GNPNAT1 <- as.numeric(as.character(ulti_tab$GNPNAT1))
+ulti_tab$ABCE1 <- as.numeric(as.character(ulti_tab$ABCE1))
+ulti_tab$PUS7 <- as.numeric(as.character(ulti_tab$PUS7))
+ulti_tab$TRIP13 <- as.numeric(as.character(ulti_tab$TRIP13))
 
 
 pdf("OSBPL3_expression.pdf")
@@ -67,16 +70,110 @@ ylab="OSBPL3 RPKM")
 dev.off()
 
 
+boxplot(GNPNAT1 ~ stage_status, data=ulti_tab, main="GNPNAT1 expression", xlab="stage_status", ylab="GNPNAT1 RPKM")
+
+
+boxplot(ABCE1 ~ stage_status, data=ulti_tab, main="ABCE1 expression", xlab="stage_status", ylab="ABCE1 RPKM")
+
+
+boxplot(PUS7 ~ stage_status, data=ulti_tab, main="PUS7 expression", xlab="stage_status", ylab="PUS7 RPKM")
+
+
+boxplot(TRIP13 ~ stage_status, data=ulti_tab, main="TRIP13 expression", xlab="stage_status", ylab="TRIP13 RPKM")
+
+
+
+
 
 t.test(ulti_tab$OSBPL3[ulti_tab$stage_status == "III"], ulti_tab$OSBPL3[ulti_tab$stage_status == "II"])
 
 
 
 
+###################################################################################################
+## test of survival
+
+setwd("C:\\Users\\WL\\Desktop\\binglike\\zhangmin")
+
+all_tab <- read.csv(file = "COADREAD.clin.merged.txt", sep = "\t", stringsAsFactors = F, header = F)
+
+filter_tab <- all_tab[c(17,39,41,658,678,679,703,795),]
+
+clinic_tab <- t(filter_tab)
+
+row.names(clinic_tab) <- c()
+colnames(clinic_tab) <- clinic_tab[1,]
+clinic_tab <- clinic_tab[-1,]
+clinic_tab <- as.data.frame(clinic_tab)
+
+clinic_tab_no <- clinic_tab[!is.na(clinic_tab$patient.follow_ups.follow_up.vital_status),]
+
+
+
+rnaseq <-  read.csv(file = "COADREAD.mRNAseq_RPKM.txt", sep = "\t", stringsAsFactors = F, header = F)
+
+rnaseq_tab <- rnaseq[c(1,12758,7184,102,14422,18710),]
+rnaseq_tab[1,] <- substr(rnaseq_tab[1,], 1,12)
+rnaseq_tab[1,] <- tolower(rnaseq_tab[1,])
+rnaseq_tab <- t(rnaseq_tab)
+rnaseq_tab <- as.data.frame(rnaseq_tab)
+row.names(rnaseq_tab) <- c()
+tag_names <- c("TCGAIDs", "OSBPL3", "GNPNAT1", "ABCE1", "PUS7", "TRIP13")
+colnames(rnaseq_tab) <- tag_names
+rnaseq_tab <- rnaseq_tab[-1,]
+
+
+## emerge the tow tables
+final_tab <- merge(clinic_tab_no, rnaseq_tab, by.x = "patient.bcr_patient_barcode", by.y = "TCGAIDs", all = T)
+final_tab_clean <- final_tab[!is.na(final_tab$OSBPL3),]
+ulti_tab <- final_tab_clean[!is.na(final_tab_clean$patient.follow_ups.follow_up.vital_status),]
+ulti_tab$patient.days_to_last_followup <- as.numeric(as.character(ulti_tab$patient.days_to_last_followup))
+ulti_tab$patient.days_to_death <- as.numeric(as.character(ulti_tab$patient.days_to_death))
 
 
 
 
 
+ulti_tab$days <- rep(NA, length(ulti_tab[,1]))
 
+for (i in 1:length(ulti_tab[,1])){
+  if (is.na(ulti_tab[i,2])){
+    ulti_tab[i,14] <- ulti_tab[i,3]
+  } else {
+    ulti_tab[i,14] <- ulti_tab[i,2]
+  }
+}
+
+ulti_tab$OSBPL3 <- as.numeric(as.character(ulti_tab$OSBPL3))
+ulti_tab$GNPNAT1 <- as.numeric(as.character(ulti_tab$GNPNAT1))
+ulti_tab$ABCE1 <- as.numeric(as.character(ulti_tab$ABCE1))
+ulti_tab$PUS7 <- as.numeric(as.character(ulti_tab$PUS7))
+ulti_tab$TRIP13 <- as.numeric(as.character(ulti_tab$TRIP13))
+
+
+quantile(ulti_tab$OSBPL3)
+
+ulti_tab$OSBPL3_type <- rep(NA, length(ulti_tab[,1]))
+
+for (i in 1:length(ulti_tab[,1])){
+  if (ulti_tab[i,9] < 3.0674993){
+    ulti_tab[i,15] <- "Q1"
+  } else if(ulti_tab[i,9] >= 3.0674993 && ulti_tab[i,9] < 4.0699451){
+    ulti_tab[i,15] <- "Q2"
+  } else if(ulti_tab[i,9] >= 4.0699451 && ulti_tab[i,9] < 4.9149512){
+    ulti_tab[i,15] <- "Q3"
+  } else if(ulti_tab[i,9] >= 4.9149512 && ulti_tab[i,9] < 8.6708138){
+    ulti_tab[i,15] <- "Q4"
+  }
+}
+
+
+
+library(stats)
+library(survival)
+
+
+Surv(days, patient.follow_ups.follow_up.vital_status, data = ulti_tab)
+
+km.as.one <- survfit(Surv(days, patient.follow_ups.follow_up.vital_status) ~ OSBPL3_type, data = ulti_tab, conf.type = "log-log")
 
